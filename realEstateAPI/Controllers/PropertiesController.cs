@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using realEstateAPI.Data;
 using realEstateAPI.Models.Domain;
 using realEstateAPI.Models.DTO;
@@ -12,12 +13,15 @@ namespace realEstateAPI.Controllers
     {
         private readonly RealEstateDbContext dbContext;
         private readonly IPropertyRepository propertyRepository;
+        private readonly IMapper mapper;
 
         public PropertiesController(RealEstateDbContext dbContext,
-            IPropertyRepository propertyRepository)
+            IPropertyRepository propertyRepository,
+            IMapper mapper)
         {
             this.dbContext = dbContext;
             this.propertyRepository = propertyRepository;
+            this.mapper = mapper;
         }
 
         [HttpGet] 
@@ -27,8 +31,7 @@ namespace realEstateAPI.Controllers
             var propertiesDomain = await propertyRepository.GetAllAsync();
 
             // Return DTOs
-            // return Ok(mapper.Map<List<PropertyDto>>(propertiesDomain));
-            return Ok("Hello World");
+            return Ok(mapper.Map<List<PropertyDto>>(propertiesDomain));
         }
 
         [HttpGet]
@@ -46,7 +49,7 @@ namespace realEstateAPI.Controllers
         }
 
         [HttpPost]
-        [ValidateModel]
+        //[ValidateModel]
         public async Task<IActionResult> Create([FromBody] AddPropertyRequestDto addPropertyRequestDto)
         {
             var propertyDomainModel = mapper.Map<Property>(addPropertyRequestDto);
@@ -60,7 +63,7 @@ namespace realEstateAPI.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
-        [ValidateModel]
+        //[ValidateModel]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdatePropertyRequestDto updatePropertyRequestDto)
         {
             var propertyDomainModel = mapper.Map<Property>(updatePropertyRequestDto);

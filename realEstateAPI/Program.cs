@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using realEstateAPI.Data;
+using realEstateAPI.Mappings;
 using realEstateAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +15,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<RealEstateDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("RealEstateConnection")));
 
-builder.Services.AddScoped<IPropertyRepository, SQLPropertyRepository>();   
+builder.Services.AddScoped<IPropertyRepository, SQLPropertyRepository>();
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 var app = builder.Build();
 
