@@ -2,6 +2,7 @@
 using realEstateAPI.Data;
 using realEstateAPI.Models.Domain;
 using realEstateAPI.Models.DTO;
+using realEstateAPI.Repositories;
 
 namespace realEstateAPI.Controllers
 {
@@ -10,17 +11,20 @@ namespace realEstateAPI.Controllers
     public class PropertiesController : ControllerBase
     {
         private readonly RealEstateDbContext dbContext;
+        private readonly IPropertyRepository propertyRepository;
 
-        public PropertiesController(RealEstateDbContext dbContext)
+        public PropertiesController(RealEstateDbContext dbContext,
+            IPropertyRepository propertyRepository)
         {
             this.dbContext = dbContext;
+            this.propertyRepository = propertyRepository;
         }
 
         [HttpGet] 
         public async Task<IActionResult> GetAll()
         {
             // Get Data From Database - Domain models
-            // var propertiesDomain = await propertyRepository.GetAllAsync();
+            var propertiesDomain = await propertyRepository.GetAllAsync();
 
             // Return DTOs
             // return Ok(mapper.Map<List<PropertyDto>>(propertiesDomain));
@@ -31,7 +35,7 @@ namespace realEstateAPI.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> GetByID([FromRoute] Guid id)
         { 
-            var propertyDomain = await propertyRepository.GetByIDAsync(id);
+            var propertyDomain = await propertyRepository.GetByIdAsync(id);
 
             if (propertyDomain == null)
             {

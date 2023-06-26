@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using realEstateAPI.Data;
+using realEstateAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<RealEstateDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("RealEstateConnection")));
+
+builder.Services.AddScoped<IPropertyRepository, SQLPropertyRepository>();   
 
 var app = builder.Build();
 
